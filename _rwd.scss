@@ -7,9 +7,9 @@ $rwd_sizes: desktop 980px, tablet 740px, small-tablet 600px, wide-mobile 480px, 
 		@each $rwd_size in $rwd_sizes {
 			$name: nth($rwd_size, 1);
 			$width: nth($rwd_size, 2);
-			$size_action: false;
+			$action: false;
 			@if length($rwd_size) == 3 {
-				$size_action: nth($rwd_size, 3);
+				$action: nth($rwd_size, 3);
 			}
 			$next_width: false;
 			
@@ -22,7 +22,7 @@ $rwd_sizes: desktop 980px, tablet 740px, small-tablet 600px, wide-mobile 480px, 
 			@if $name == $size {
 				@if $and_below == false {
 					@if $next_width {
-						@if $size_action != lessthan {
+						@if $action != lessthan {
 							$min_width: $width;
 							$max_width: $next_width;
 						}
@@ -31,7 +31,7 @@ $rwd_sizes: desktop 980px, tablet 740px, small-tablet 600px, wide-mobile 480px, 
 						}
 					}
 					@else {
-						@if $size_action != lessthan {
+						@if $action != lessthan {
 							$min_width: $width;
 						}
 						@else {
@@ -40,7 +40,12 @@ $rwd_sizes: desktop 980px, tablet 740px, small-tablet 600px, wide-mobile 480px, 
 					}
 				}
 				@else {
-					$max_width: $width;
+					@if $next_width == false {
+						$max_width: $width;
+					}
+					@else {
+						$max_width: $next_width;
+					}
 				}
 			}
 			

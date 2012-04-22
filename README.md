@@ -13,7 +13,7 @@ aside {
 }
 ```
 
-You can also specify multiple modes:
+You can also specify multiple sizes:
 ```scss
 #content {
 	width: 960px;
