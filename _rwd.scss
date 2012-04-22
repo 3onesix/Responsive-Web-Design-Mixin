@@ -1,6 +1,8 @@
 $rwd_sizes: desktop 980px, tablet 740px, small-tablet 600px, wide-mobile 480px, mobile 479px lessthan;
 @mixin responds-to($size, $and_below: false) {
 	$ri: 1;
+	$min_width: false;
+	$max_width: false;
 	@each $rwd_size in $rwd_sizes {
 		$name: nth($rwd_size, 1);
 		$width: nth($rwd_size, 2);
@@ -20,36 +22,47 @@ $rwd_sizes: desktop 980px, tablet 740px, small-tablet 600px, wide-mobile 480px, 
 			@if $and_below == false {
 				@if $next_width {
 					@if $size_action != lessthan {
-						@media only screen and (min-width: $width) and (max-width: $next_width - 1) {
-							@content;
-						}
+						$min_width: $width;
+						$max_width: $next_width;
 					}
 					@else {
-						@media only screen and (max-width: $next_width) {
-							@content;
-						}
+						$max_width: $next_width - 1;
 					}
 				}
 				@else {
 					@if $size_action != lessthan {
-						@media only screen and (min-width: $width) {
-							@content;
-						}
+						$min_width: $width;
 					}
 					@else {
-						@media only screen and (max-width: $width) {
-							@content;
-						}
+						$max_width: $width;
 					}
 				}
 			}
 			@else {
-				@media only screen and (max-width: $width) {
-					@content;
-				}
+				$max_width: $width;
 			}
 		}
 		
 		$ri: $ri + 1;
+	}
+	
+	@if $min_width != false {
+		@if $max_width != false {
+			@media only screen and (min-width: $min_width) and (max-width: $max_width) {
+				@content;
+			}
+		}
+		@else {
+			@media only screen and (min-width: $min_width) {
+				@content;
+			}
+		}
+	}
+	@else {
+		@if $max_width != false {
+			@media only screen and (max-width: $max_width) {
+				@content;
+			}
+		}
 	}
 }
