@@ -12,3 +12,11 @@ aside {
 	}
 }
 ```
+
+You can also specify multiple modes:
+```scss
+#content {
+	width: 960px;
+	@include responds-to(tablet small-tablet) { width: 600px; }
+}
+```

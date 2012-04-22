@@ -1,67 +1,69 @@
 $rwd_sizes: desktop 980px, tablet 740px, small-tablet 600px, wide-mobile 480px, mobile 479px lessthan;
-@mixin responds-to($size, $and_below: false) {
-	$ri: 1;
-	$min_width: false;
-	$max_width: false;
-	@each $rwd_size in $rwd_sizes {
-		$name: nth($rwd_size, 1);
-		$width: nth($rwd_size, 2);
-		$size_action: false;
-		@if length($rwd_size) == 3 {
-			$size_action: nth($rwd_size, 3);
-		}
-		$next_width: false;
-		
-		@if $ri > 1 {
-			@if $ri <= length($rwd_sizes) {
-				$next_width: nth(nth($rwd_sizes, $ri - 1), 2);
+@mixin responds-to($sizes, $and_below: false) {
+	@each $size in $sizes {
+		$ri: 1;
+		$min_width: false;
+		$max_width: false;
+		@each $rwd_size in $rwd_sizes {
+			$name: nth($rwd_size, 1);
+			$width: nth($rwd_size, 2);
+			$size_action: false;
+			@if length($rwd_size) == 3 {
+				$size_action: nth($rwd_size, 3);
 			}
-		}
-		
-		@if $name == $size {
-			@if $and_below == false {
-				@if $next_width {
-					@if $size_action != lessthan {
-						$min_width: $width;
-						$max_width: $next_width;
+			$next_width: false;
+			
+			@if $ri > 1 {
+				@if $ri <= length($rwd_sizes) {
+					$next_width: nth(nth($rwd_sizes, $ri - 1), 2);
+				}
+			}
+			
+			@if $name == $size {
+				@if $and_below == false {
+					@if $next_width {
+						@if $size_action != lessthan {
+							$min_width: $width;
+							$max_width: $next_width;
+						}
+						@else {
+							$max_width: $next_width - 1;
+						}
 					}
 					@else {
-						$max_width: $next_width - 1;
+						@if $size_action != lessthan {
+							$min_width: $width;
+						}
+						@else {
+							$max_width: $width;
+						}
 					}
 				}
 				@else {
-					@if $size_action != lessthan {
-						$min_width: $width;
-					}
-					@else {
-						$max_width: $width;
-					}
+					$max_width: $width;
+				}
+			}
+			
+			$ri: $ri + 1;
+		}
+		
+		@if $min_width != false {
+			@if $max_width != false {
+				@media only screen and (min-width: $min_width) and (max-width: $max_width) {
+					@content;
 				}
 			}
 			@else {
-				$max_width: $width;
-			}
-		}
-		
-		$ri: $ri + 1;
-	}
-	
-	@if $min_width != false {
-		@if $max_width != false {
-			@media only screen and (min-width: $min_width) and (max-width: $max_width) {
-				@content;
+				@media only screen and (min-width: $min_width) {
+					@content;
+				}
 			}
 		}
 		@else {
-			@media only screen and (min-width: $min_width) {
-				@content;
-			}
-		}
-	}
-	@else {
-		@if $max_width != false {
-			@media only screen and (max-width: $max_width) {
-				@content;
+			@if $max_width != false {
+				@media only screen and (max-width: $max_width) {
+					@content;
+				}
 			}
 		}
 	}
